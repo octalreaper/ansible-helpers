@@ -1,0 +1,17 @@
+- name: Basic
+  hosts: all
+  become: yes
+  user: root
+  roles:
+    - sw
+    - user
+    - ssh
+    - fw
+
+- name: Advanced
+  hosts: all
+  become: yes
+  user: user
+  roles:
+    - docker
+    - swap
