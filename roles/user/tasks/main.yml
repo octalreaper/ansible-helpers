@@ -17,3 +17,12 @@
     dest: /etc/sudoers.d/{{ user }}
     mode: '0440'
     validate: /usr/sbin/visudo -cf %s
+
+- name: Add ssh key
+  authorized_key:
+    state: present
+    user: {{ user }}
+    key: '{{item.ssh}}'
+  register: add_identity_key
+  with_items:
+  - { ssh: "ssh-ed25519 ..." }
