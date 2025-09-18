@@ -1,0 +1,19 @@
+- name: Create user {{ user }}
+  ansible.builtin.user:
+    name: {{ user }}
+    state: present
+    shell: /bin/bash
+    create_home: true
+
+- name: Add {{ user }} to the 'sudo' and 'adm' group
+  ansible.builtin.user:
+    name: {{ user }}
+    groups: sudo, adm
+    append: true
+
+- name: Create sudoers file for {{ user }}
+  ansible.builtin.copy:
+    content: "{{ user }} ALL=(ALL) NOPASSWD:ALL"
+    dest: /etc/sudoers.d/{{ user }}
+    mode: '0440'
+    validate: /usr/sbin/visudo -cf %s
