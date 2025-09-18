@@ -1,0 +1,41 @@
+- name: Install required packages using apt
+  apt:
+    update_cache: true
+    name: 
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - software-properties-common
+      - net-tools
+      - netfilter-persistent
+    state: present
+    cache_valid_time: 86400
+
+- name: Add Docker GPG apt Key
+  apt_key:
+    url: "https://download.docker.com/linux/{{ ansible_distribution | lower }}/gpg"
+    state: present
+    keyring: /etc/apt/trusted.gpg.d/docker.gpg
+
+- name: Add Docker Repository
+  apt_repository:
+    repo: "deb [arch={{ docker_apt_arch }}] https://download.docker.com/linux/{{ ansible_distribution | lower }} {{ ansible_distribution_release }} {{ docker_apt_release_channel }}"
+    state: present
+    update_cache: true
+
+- name: Install Docker and related packages
+  apt:
+    update_cache: true
+    name: 
+      - docker-ce
+      - docker-ce-cli
+      - docker-compose-plugin
+      - containerd.io
+      - docker-buildx-plugin
+    state: present
+
+- name: Run and enable Docker
+  service:
+    name: docker
+    state: restarted
+    enabled: true
