@@ -1,3 +1,13 @@
 - name: Update cache
   ansible.builtin.apt:
     update_cache: yes
+
+- name: Install packages
+  ansible.builtin.apt:
+    pkg:
+    - curl
+    - htop
+    - vim
+    - jq
+    - bc
+    - net-tools
